@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SCRAMBLEROUT
+#include "pn_gen.h"
+
+//#define SCRAMBLEROUT
 
 int main(int argc, char **argv) {
 	int out[255];
@@ -10,6 +12,8 @@ int main(int argc, char **argv) {
 	int unscrambler = 0x05;
 	int i, feedback;
 	int input = 1;
+	pn_gen gen1;
+	gen1.internal_state = 0x05;
 
 	if(argc < 2) {
 		printf("Please enter number of cycles to simulate\n");
@@ -31,7 +35,8 @@ int main(int argc, char **argv) {
 		unscrambler &= 0x1F;
 		unscrambler |= feedback;
 		
-		out2[i] = ((unscrambler & 0x08)>>3) ^ ((unscrambler & 0x20) >> 5);
+		out2[i] = ((unscrambler & 0x08)>>3) ^ ((unscrambler & 0x20) >> 5) ^ (unscrambler & 0x01);
+
 		unscrambler >>= 1;		
 
 	#ifdef SCRAMBLEROUT
